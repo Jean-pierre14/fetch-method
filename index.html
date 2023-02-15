@@ -68,10 +68,17 @@
 
   // Selecting data using Fetch method
   let output = ``;
-  function SelectAll() {
+
+  let Init = async () => {
+    await SelectAll().then(() => {
+      getOneCourse();
+    });
+  };
+
+  const SelectAll = async () => {
     output = "";
 
-    fetch("http://localhost:7000/api")
+    await fetch("http://localhost:7000/api")
       .then((res) => {
         return res.json().then((data) => {
           data.courses.forEach((course) => {
@@ -79,8 +86,8 @@
               <div class="d-flex shadow-sm my-3 p-3 justify-content-between align-items-center">
                 <span>${course.name}</span>
                 <div class="btn-group">
-                  <a href="index.html?edit=${course._id}" class="btn btn-sm btn-info">Edit</a>    
-                  <a href="index.html?delete=${course._id}" class="btn btn-sm btn-danger">Delete</a>    
+                  <button type="button" id="${course._id}" class="edit btn btn-sm btn-info">Edit</button>    
+                  <button type="button" id="${course._id}"class="delete btn btn-sm btn-danger">Delete</button>    
                 </div>
               </div>
               `;
@@ -89,9 +96,35 @@
         });
       })
       .catch((err) => console.log(`Error: ${err.message}`));
-  }
+  };
 
-  SelectAll();
+  // Get one course
+  const getOneCourse = () => {
+    const get = document.querySelectorAll(".edit").forEach((el) => {
+      el.onclick = (event) => {
+        const element_ID = event.target.id;
+        // console.log("Id: " + element_ID);
+        result.innerHTML = '<p class=" alert alert-warning">Loading...</p>';
+
+        fetch(`http://localhost:7000/api/${element_ID}`)
+          .then((res) =>
+            res.json().then((data) => {
+              result.innerHTML = "";
+              console.log(data);
+              result.innerHTML = `
+                <div class="card card-body shadow-sm">
+                  <h3>Name: ${data.courses.name}</h3>
+                  <p><strong>Description:</strong> <span>${data.courses.description}</span></p>
+                  <div class="close">
+                    <button class="btn btn-sm btn-info" type="button">Back to the list</button>  
+                  </div>
+                </div>`;
+            })
+          )
+          .catch((err) => console.log("Error: " + err.message));
+      };
+    });
+  };
 
   myForm.onsubmit = (event) => {
     event.preventDefault();
@@ -99,7 +132,7 @@
     const formData = new FormData(myForm),
       data = new URLSearchParams(formData);
 
-    console.log(formData.get("name"));
+    // console.log(formData.get("name"));
 
     fetch("http://localhost:7000/api", {
       method: "POST",
@@ -117,4 +150,6 @@
       })
       .catch((err) => console.log(`Error: ${err.message}`));
   };
+
+  Init();
 </script>
