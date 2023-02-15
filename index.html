@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Nodejs CRUD with express</title>
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/css/bootstrap.min.css"
+    />
+  </head>
+  <body>
+    <div class="container">
+      <div class="row py-3">
+        <div class="col-4 col-md-4">
+          <div class="card card-body shadow-sm">
+            <h3>Registration of course</h3>
+            <div id="error"></div>
+            <form action="" id="myForm" method="post">
+              <div class="form-group">
+                <label for="name">Name of course</label>
+                <input
+                  type="text"
+                  name="name"
+                  id="name"
+                  placeholder="Name of course"
+                  class="form-control"
+                />
+              </div>
+              <div class="form-group">
+                <label for="desc">Description</label>
+                <textarea
+                  name="description"
+                  id="desc"
+                  name="description"
+                  class="form-control"
+                  placeholder="Description...
+                "
+                ></textarea>
+              </div>
+              <div class="form-group mt-3">
+                <button
+                  type="submit"
+                  id="btn_submit"
+                  class="btn btn-primary btn-lg"
+                >
+                  Register
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+        <div class="col-8 col-md-8">
+          <div id="results">
+            <h4>Loading...</h4>
+          </div>
+        </div>
+      </div>
+    </div>
+  </body>
+</html>
+
+<script>
+  let result = document.getElementById("results");
+  const myForm = document.getElementById("myForm"),
+    error = document.getElementById("error");
+
+  // Selecting data using Fetch method
+  let output = ``;
+  function SelectAll() {
+    output = "";
+
+    fetch("http://localhost:7000/api")
+      .then((res) => {
+        return res.json().then((data) => {
+          data.courses.forEach((course) => {
+            output += `
+              <div class="d-flex shadow-sm my-3 p-3 justify-content-between align-items-center">
+                <span>${course.name}</span>
+                <div class="btn-group">
+                  <a href="index.html?edit=${course._id}" class="btn btn-sm btn-info">Edit</a>    
+                  <a href="index.html?delete=${course._id}" class="btn btn-sm btn-danger">Delete</a>    
+                </div>
+              </div>
+              `;
+          });
+          result.innerHTML = output;
+        });
+      })
+      .catch((err) => console.log(`Error: ${err.message}`));
+  }
+
+  SelectAll();
+
+  myForm.onsubmit = (event) => {
+    event.preventDefault();
+
+    const formData = new FormData(myForm),
+      data = new URLSearchParams(formData);
+
+    console.log(formData.get("name"));
+
+    fetch("http://localhost:7000/api", {
+      method: "POST",
+      body: data,
+    })
+      .then((res) => res.json())
+      .then((data) => {
+        // console.log(data);
+        if (data.status === 200) {
+          myForm.reset(0);
+          SelectAll();
+        } else {
+          return;
+        }
+      })
+      .catch((err) => console.log(`Error: ${err.message}`));
+  };
+</script>
