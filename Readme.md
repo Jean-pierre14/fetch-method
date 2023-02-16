@@ -2,9 +2,9 @@
 
 ---
 
-## Backend.
+## Backend [nodejs.org](https://nodejs.org/en/).
 
-1. Pour commencer il faut d'abord telecharger les codes backend sur `github` (type: `git clone https://github.com/Domeshow/Nodejs-CRUD-API`)
+1. Pour commencer il faut d'abord telecharger [nodejs](https://nodejs.org/en/) les codes backend sur `github` (type: `git clone https://github.com/Domeshow/Nodejs-CRUD-API`)
 
 - ```bash
     npm install
@@ -15,7 +15,7 @@
 2. Etape numero 2, il faut configurer et creer le fiche `.env` dans la partie `backend`
 
 ```bash
-    # \.env
+    ## Dans le fiche \.env
     PORT = 7000
 
     DB = 'mongodb string API'

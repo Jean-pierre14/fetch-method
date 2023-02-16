@@ -78,7 +78,7 @@
 
   const SelectAll = async () => {
     output = "";
-    btn = Boolean(true);
+    btn = new Boolean(true);
     await fetch("http://localhost:7000/api")
       .then((res) => {
         return res.json().then((data) => {
