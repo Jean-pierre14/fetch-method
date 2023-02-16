@@ -29,6 +29,6 @@ Vous n'avez de rien que cette page web.
 
 - Run le server en tapant
 
-```bash
+```shell
     npm start
 ```
