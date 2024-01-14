@@ -124,4 +124,12 @@ myForm.onsubmit = (event) => {
     });
 };
 
+
+function update(event){
+  // PreventDefaut behavior
+  
+  event.preventDefault();
+  
+}
+
 Init();
